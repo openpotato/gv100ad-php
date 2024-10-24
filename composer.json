@@ -1,5 +1,5 @@
 {
-  "name": "openpotato/gv100ad",
+  "name": "openpotato/gv100ad-php",
   "description": "A PHP library for parsing GV100AD files (Gemeindeverzeichnis) provided by Destatis.",
   "version": "0.1.0",
   "type": "library",
