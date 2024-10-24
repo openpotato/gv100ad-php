@@ -42,7 +42,7 @@ class Region extends BaseRecord
             $this->name,
             $this->regional_code,
             $this->administrative_headquarters,
-            $this->timestamp
+            $this->timestamp->format('Y-m-d')
         );
     }
 }

@@ -141,7 +141,7 @@ class Municipality extends BaseRecord
             $this->regional_court_district,
             $this->local_court_district,
             $this->employment_agency_district,
-            $this->timestamp
+            $this->timestamp->format('Y-m-d')
         );
     }
 }

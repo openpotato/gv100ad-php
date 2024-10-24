@@ -51,7 +51,7 @@ class District extends BaseRecord
             $this->regional_code,
             $this->administrative_headquarters,
             $this->type->name,
-            $this->timestamp
+            $this->timestamp->format('Y-m-d')
         );
     }
 }

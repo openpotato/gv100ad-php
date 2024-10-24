@@ -42,7 +42,7 @@ class FederalState extends BaseRecord
             $this->name,
             $this->regional_code,
             $this->seat_of_government,
-            $this->timestamp
+            $this->timestamp->format('Y-m-d')
         );
     }
 }

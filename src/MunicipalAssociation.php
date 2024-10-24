@@ -60,7 +60,7 @@ class MunicipalAssociation extends BaseRecord
             $this->association,
             $this->administrative_headquarters,
             $this->type->name,
-            $this->timestamp
+            $this->timestamp->format('Y-m-d')
         );
     }
 }
