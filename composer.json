@@ -1,15 +1,14 @@
 {
   "name": "openpotato/gv100ad-php",
   "description": "A PHP library for parsing GV100AD files (Gemeindeverzeichnis) provided by Destatis.",
-  "version": "0.1.3",
   "type": "library",
   "require": {
     "php": ">=8.2"
   },
   "autoload": {
-    "classmap": [
-      "src/"
-    ]
+    "psr-4": {
+      "OpenPotato\\GV100AD\\": "src/"
+    }
   },
   "license": "MIT",
   "authors": [
@@ -17,6 +16,13 @@
       "name": "STÜBER SYSTEMS GmbH",
       "email": "openource@stueber.de"
     }
+  ],
+  "keywords": [
+    "destatis",
+    "gv100ad",
+    "gemeindeverzeichnis",
+    "germany",
+    "parser"
   ],
   "require-dev": {
     "phpunit/phpunit": "^12.5"
