@@ -11,6 +11,33 @@ use PHPUnit\Framework\TestCase;
 
 class GV100ADReaderTest extends TestCase
 {
+    public function testEmptyLinesAreSkipped()
+    {
+        $text = "\n6020220131082260135001Eberbach, Stadt                                                                                     63    000000081150000001426700000006914    69412*****  2840130262405277                           \n\n";
+        $str_stream = fopen('php://memory', 'r+');
+        fwrite($str_stream, $text);
+        rewind($str_stream);
+
+        $gv_reader = new GV100ADReader($str_stream);
+        $records = iterator_to_array($gv_reader->read());
+
+        $this->assertCount(1, $records);
+        $this->assertInstanceOf(Municipality::class, $records[0]);
+    }
+
+    public function testInvalidDateThrowsException()
+    {
+        $text_line = "10XXXXXXXX01          Schleswig-Holstein                                Kiel                                                                                                                                                ";
+        $str_stream = fopen('php://memory', 'r+');
+        fwrite($str_stream, $text_line);
+        rewind($str_stream);
+
+        $gv_reader = new GV100ADReader($str_stream);
+
+        $this->expectException(\InvalidArgumentException::class);
+        iterator_to_array($gv_reader->read());
+    }
+
     public function testDistrict()
     {
         $text_line = "402022013108221       Heidelberg, Stadtkreis                            Heidelberg                                        42                                                                                                ";
@@ -114,6 +141,22 @@ class GV100ADReaderTest extends TestCase
         $this->assertEquals('02', $record->local_court_district);
         $this->assertEquals('62405', $record->employment_agency_district);
 
+        $this->assertCount(1, $records);
+    }
+
+    public function testMunicipalityWithoutMultiplePostcodesFlag()
+    {
+        $text_line = "6020220131082260135001Eberbach, Stadt                                                                                     63    000000081150000001426700000006914    69412*****  2840130262405277                           ";
+        $text_line = substr_replace($text_line, '00000', 170, 5);
+        $str_stream = fopen('php://memory', 'r+');
+        fwrite($str_stream, $text_line);
+        rewind($str_stream);
+
+        $gv_reader = new GV100ADReader($str_stream);
+        $records = iterator_to_array($gv_reader->read());
+        $record = $records[0];
+
+        $this->assertFalse($record->multiple_postal_codes);
         $this->assertCount(1, $records);
     }
 

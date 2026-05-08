@@ -62,7 +62,7 @@ class Municipality extends BaseRecord
      * 
      * @var string
      */
-    public $tax_office_district;
+    public string $tax_office_district;
 
     /**
      * Oberlandesgerichtsbezirk (EF15U1)
@@ -109,7 +109,7 @@ class Municipality extends BaseRecord
         $this->inhabitants = (int) trim(mb_substr($line, 139, 11, "UTF-8"));
         $this->inhabitants_male = (int) trim(mb_substr($line, 150, 11, "UTF-8"));
         $this->postal_code = trim(mb_substr($line, 165, 5, "UTF-8"));
-        $this->multiple_postal_codes = (bool) trim(mb_substr($line, 170, 5, "UTF-8"));
+        $this->multiple_postal_codes = trim(mb_substr($line, 170, 5, "UTF-8")) === '*****';
         $this->tax_office_district = trim(mb_substr($line, 177, 4, "UTF-8"));
         $this->higher_regional_court_district = trim(mb_substr($line, 181, 1, "UTF-8"));
         $this->regional_court_district = trim(mb_substr($line, 182, 1, "UTF-8"));

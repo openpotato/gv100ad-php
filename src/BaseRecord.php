@@ -6,7 +6,7 @@
 
 namespace OpenPotato\GV100AD;
 
-class BaseRecord
+abstract class BaseRecord
 {
     /**
      * Gebietsstand (EF2)
@@ -36,8 +36,7 @@ class BaseRecord
      */
     public function __construct(string $line)
     {
-        $this->timestamp = \DateTime::createFromFormat('Ymd', mb_substr($line, 2, 8, "UTF-8"));
-        $this->timestamp->SetTime(0, 0, 0, 0);
+        $this->timestamp = $this->parseDateOnly(mb_substr($line, 2, 8, "UTF-8"));
         $this->name = rtrim(mb_substr($line, 22, 50, "UTF-8"));
     }
 
@@ -48,6 +47,31 @@ class BaseRecord
      */
     public function __toString(): string
     {
-        return sprintf("BaseRecord(Name=%s, TimeStamp=%s)", $this->name, $this->timestamp);
+        return sprintf(
+            "BaseRecord(Name=%s, TimeStamp=%s)", 
+            $this->name, 
+            $this->timestamp->format('Y-m-d')
+        );
+    }
+
+    /**
+     * Parses the raw record date and validates it.
+     *
+     * @param string $rawDate The raw date from EF2.
+     *
+     * @return \DateTime A normalized timestamp.
+     */
+    private function parseDateOnly(string $rawDate): \DateTime
+    {
+        $timestamp = \DateTime::createFromFormat('Ymd', $rawDate);
+        $dateErrors = \DateTime::getLastErrors();
+
+        if (!$timestamp || ($dateErrors !== false && ($dateErrors['warning_count'] > 0 || $dateErrors['error_count'] > 0))) {
+            throw new \InvalidArgumentException("Invalid record date '{$rawDate}'.");
+        }
+
+        $timestamp->setTime(0, 0, 0, 0);
+
+        return $timestamp;
     }
 }

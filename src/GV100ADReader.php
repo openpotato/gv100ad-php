@@ -28,7 +28,13 @@ class GV100ADReader
     public function read(): \Iterator
     {
         while (($line = fgets($this->text_reader)) !== false) {
-            yield $this->create_record(trim($line));
+            $line = rtrim($line, "\r\n");
+
+            if ($line === '') {
+                continue;
+            }
+
+            yield $this->create_record($line);
         }
     }
 
@@ -42,7 +48,9 @@ class GV100ADReader
      */
     private function create_record(string $line): BaseRecord
     {
-        switch (substr($line, 0, 2)) {
+        $record_type = substr($line, 0, 2);
+
+        switch ($record_type) {
             case '10':
                 return new FederalState($line);
             case '20':
@@ -56,7 +64,7 @@ class GV100ADReader
             case '60':
                 return new Municipality($line);
             default:
-                throw new \InvalidArgumentException("Record type {$line[0]}{$line[1]} is not supported.");
+                throw new \InvalidArgumentException("Record type '{$record_type}' is not supported.");
         }
     }
 }

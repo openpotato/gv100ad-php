@@ -5,7 +5,7 @@
 
 A Python library for parsing GV100AD files (Gemeindeverzeichnis) provided by [Destatis](https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/_inhalt.html). 
 
-+ Supports PHP 8.2+
++ Supports PHP 8.3+
 + Supports all GV100AD record types:
   + Federal state (Bunduesland, Satzart 10)
   + Government region (Regierungsbezirk, Satzart 20)
